@@ -1,0 +1,50 @@
+<nav
+    class="navbar navbar-expand-lg navbar-light navbar-default navbr-fixed-top iphone5"
+>
+<div class="container-fluid">
+    <a class="navbar-brand" routerLink="/">
+        <div class="d-flex align-items-center">
+            <div>
+                <img
+                    height="110"
+                    width="auto"
+                    src="assets/assets/images/newlogosmall.jpeg"
+                />
+            </div>
+            <div class="Text1 text-dark">
+                ລະບົບລົງທະບຽນລ່ວງຫນ້າສຳລັບການ<br />ຮັບວັກຊິນກັນພະຍາດໂຄວິດ
+            </div>
+        </div>
+    </a>
+</div>
+
+    <button
+        class="Toggle1 navbar-toggler"
+        type="button"
+        data-toggle="collapse"
+        data-target="#navbarSupportedContent"
+        aria-controls="navbarSupportedContent"
+        aria-expanded="false"
+        aria-label="Toggle navigation"
+    >
+        <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="Toggle2 collapse navbar-collapse" id="navbarSupportedContent">
+        <ul class="navbar-nav mr-auto"></ul>
+        <ul class="navbar-nav my-2 my-lg-0 mx-2 mx-lg-5">
+            <li class="nav-item">
+                <a class="nav-link page-scroll" routerLink="/register"
+                    >ລົງທະບຽນ/Register</a
+                >
+            </li>
+            <div style="width: 50px"></div>
+            <li class="nav-item">
+                <a class="nav-link page-scroll" routerLink="/search"
+                    >ຄົ້ນຫາ/Search</a
+                >
+            </li>
+        </ul>
+    </div>
+</nav>
+
+<router-outlet></router-outlet>

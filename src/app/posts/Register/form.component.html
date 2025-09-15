@@ -1,0 +1,1172 @@
+<ng-template class="width" #content let-c="close" let-d="dismiss">
+  <div class="showlogo">
+    <div class="Logo d-flex align-items-center ml-2 mr-2">
+      <div class="Mar2 col-sm-4 col-md-2 mt-2">
+        <img class="icons" src="assets/assets/images/newlogosmall.jpeg" />
+      </div>
+      <div class="Mar1 col-sm-4 col-md-2 mt-2">
+        <img class="icons" src="assets/assets/images/LOGO_LNCCI.png" />
+      </div>
+    </div>
+  </div>
+  <div class="modal-body">
+    <div class="container">
+      <div class="row">
+        <div class="col">
+          <h4 class="modal-title" id="modal-basic-title">ລົງທະບຽນສຳເລັດ</h4>
+          <ul class="List list-group-items">
+            <li>ຊື່ ແລະ ນາມສະກຸນ: {{ show_name }}&nbsp;{{ show_lastname }}</li>
+
+            <li>Vaccination ID: {{ show_cvin_ref }}</li>
+
+            <li>ສະຖານທີ່: {{ show_location }}</li>
+            <li>ນັດຮັບວັກຊີນ: {{ show_dtg | date : "dd/MM/yyy" }}</li>
+            <li>ສັນຊາດ: {{ show_nation }}{{ show_nationInter }}</li>
+            <li>ເລກບັດປະຈຳຕົວ:{{ show_id }}</li>
+            <li>ແຂວງ: {{ show_province }}</li>
+            <li>ເມືອງ: {{ show_district }}</li>
+          </ul>
+        </div>
+        <ngx-qrcode
+          [elementType]="elementType"
+          [value]="value"
+          cssClass="aclass"
+        >
+        </ngx-qrcode>
+        <h6>{{ value }}</h6>
+        <h5>ກະລຸນາຖ່າຍຮູບໄວ້</h5>
+      </div>
+      <button type="button" class="btn btn-outline-dark" (click)="reload()">
+        ຕົກລົງ/Ok
+      </button>
+    </div>
+  </div>
+  <div class="modal-footer">
+    <div class="Logos row">
+      <div class="Text col-sm-4 col-md-2 mt-2">
+        <img class="icon" src="assets/assets/images/Petro_trade-01.png" />
+      </div>
+      <div class="Text col-sm-4 col-md-2 mt-2">
+        <img class="icon" src="assets/assets/images/kanya_mitthapharp-01.png" />
+      </div>
+      <div class="Text col-sm-4 col-md-2 mt-2">
+        <img class="icon" src="assets/assets/images/smart_tech-01.png" />
+      </div>
+      <div class="Text col-sm-4 col-md-2 mt-2">
+        <img class="icon" src="assets/assets/images/khompunya-01.png" />
+      </div>
+    </div>
+  </div>
+</ng-template>
+
+<ng-template #contents let-c="close" let-d="dismiss">
+  <div class="modal-header">
+    <h4 class="modal-title" id="modal-basic-title">Notification</h4>
+    <button
+      type="button"
+      class="close btn btn-outline-danger"
+      aria-label="Close"
+      (click)="d('Cross click')"
+    >
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <p>ວັກຊີນໃກ້ຈະໝົດແລ້ວ!</p>
+  </div>
+  <div class="modal-footer">
+    <button
+      type="button"
+      class="btn btn-outline-danger"
+      (click)="c('Save click')"
+    >
+      ປິດ
+    </button>
+  </div>
+</ng-template>
+
+<button
+  class="btn btn-lg btn-outline-primary"
+  id="openModal"
+  (click)="openModal()"
+>
+  open
+</button>
+
+<ngx-spinner
+  bdColor="rgba(0, 0, 0, 0.8)"
+  size="medium"
+  color="#fff"
+  type="ball-spin-fade"
+  [fullScreen]="true"
+>
+  <p style="color: white">ກະລຸນາລໍຖ້າ</p>
+</ngx-spinner>
+
+<div class="page-wrapper p-t-45 p-b-50">
+  <div class="wrapper wrapper--w790">
+    <div class="card card-5">
+      <div class="card-heading">
+        <h3 class="title">ລະບົບລົງທະບຽນຮັບວັກຊິນ</h3>
+        <h3 class="title">Pre-Register for Vaccine</h3>
+      </div>
+
+      <div class="card-body bg-light">
+        <form
+          class="position bg-light"
+          [formGroup]="registerForm"
+          (ngSubmit)="onSubmit(content, loading)"
+        >
+          <div class="date_to_get">
+            <label class="col-sm-2 col-form-label"
+              >ວັນທີເດືອນປີເກີດ / <b class="subtitle">Date of birth</b></label
+            >
+
+            <input
+              [ngClass]="{ 'is-invalid': submitted && f.dob.errors }"
+              class="form-control"
+              [(ngModel)]="age_date"
+              (change)="age_cal()"
+              type="date"
+              name="dob"
+              formControlName="dob"
+              min="1900-01-01"
+              max="2012-12-31"
+            />
+            <!-- <label class="form-group" for=""> ອາຍຸຂອງທ່ານ </label> -->
+            <ng-container *ngIf="age_calculate != ''">
+              <h5>ອາຍຸຂອງທ່ານແມ່ນ {{ age_calculate }} ປີ</h5>
+            </ng-container>
+
+            <!-- <input class="col-sm-2 " type="text" value="{{ age_calculate }}" disabled> -->
+            <div *ngIf="submitted && f.dob.errors" class="invalid-feedback">
+              <div *ngIf="f.dob.errors.required">ກະລຸນາຕື່ມຂໍ້ມູນ</div>
+            </div>
+          </div>
+
+          <div class="position1">
+            <!--เลือกเขัม-->
+            <div class="vancine_dose container-fluid max-width">
+              <h5 class="title container-fluid max-width bg-primary">
+                <u
+                  >ຂໍ້ມູນພື້ນຖານຂອງຜູ້ສະໝັກ / Basic information of the
+                  applicant</u
+                >
+              </h5>
+
+              <br />
+            </div>
+            <div class="title-box">
+              <h4 class="sub-title">
+                ນີ້ແມ່ນເຂັມທໍາອິດ ຫຼື ເຂັມທີສອງຂອງທ່ານ? / Is this for your 1st
+                or 2nd dose?
+              </h4>
+            </div>
+
+            <input
+              [ngClass]="{ 'is-invalid': submitted && f.vac.errors }"
+              formControlName="vac"
+              type="radio"
+              value="1"
+              name="vac"
+              [(ngModel)]="vac1"
+              (change)="changeFn($event)"
+              id="vac1"
+            />
+            <label for="vac1">&nbsp;ເຂັມທໍາອິດ (1) / First Dose (1)</label>
+            <br />
+            <input
+              [ngClass]="{ 'is-invalid': submitted && f.vac.errors }"
+              formControlName="vac"
+              type="radio"
+              value="2"
+              name="vac"
+              [(ngModel)]="vac1"
+              [attr.disabled]="false"
+              (change)="changeFn($event)"
+              id="vac2"
+            />
+
+            <label class="dose2" for="vac2" [attr.disabled]="false" disabled
+              >&nbsp;ເຂັມທີສອງ (2) / Second Dose (2)</label
+            >
+            <div *ngIf="submitted && f.vac.errors" class="invalid-feedback">
+              <div *ngIf="f.vac.errors.required">ກະລຸນາຕື່ມຂໍ້ມູນ</div>
+            </div>
+            <br />
+
+            <ng-container *ngIf="radio1">
+              <br />
+              <div class="form-group row">
+                <label
+                  >ຕື່ມລະຫັດ ID
+                  ການສັກວັກຊີນຂອງທ່ານໃສ່ໃຫ້ຄືກັນກັບບັດສັກວັກຊີນຂອງທ່ານ.</label
+                >
+                <label>ຕົວຢ່າງ: H1234-A-12345</label>
+                <label>Add your vaccination card number</label>
+                <label>Example: H1234-A-12345</label>
+                <div class="col-sm-10">
+                  <input
+                    [ngClass]="{
+                      'is-invalid': submitted && f.vac_details.value == ''
+                    }"
+                    formControlName="vac_details"
+                    name="vac_details"
+                    type="test"
+                    class="form-control"
+                    placeholder="Covid ID card"
+                  />
+                </div>
+              </div>
+              <br />
+            </ng-container>
+          </div>
+          <!--เลือกเขัม-->
+          <div class="vacin_type_selet_box">
+            <ng-container *ngIf="vac1 == 2">
+              <label class="col-sm-2 col-form-label"
+                >ປະເພດຂອງວັກຊີນ / Type of vaccine</label
+              >
+              <div class="vaccine_type">
+                <select
+                  [ngClass]="{
+                    'is-invalid': submitted && f.id_vaccine.value == ''
+                  }"
+                  formControlName="id_vaccine"
+                  name="id_vaccine"
+                  class="form-control"
+                >
+                  <option value="" disabled selected hidden>
+                    ເລືອກປະເພດວັກຊີນ / Select a vaccine
+                  </option>
+                  <option
+                    [value]="vaccines.id_vaccine_type"
+                    *ngFor="let vaccines of vaccinesList"
+                  >
+                    {{ vaccines.name }}
+                  </option>
+                </select>
+                <div
+                  *ngIf="submitted && f.id_vaccine.errors"
+                  class="invalid-feedback"
+                >
+                  <div *ngIf="f.id_vaccine.errors.required">
+                    ກະລຸນາຕື່ມຂໍ້ມູນ
+                  </div>
+                </div>
+              </div>
+            </ng-container>
+          </div>
+
+          <div class="location_to_get">
+            <label class="col-sm-2 col-form-label"
+              >ເລືອກສະຖານທີ່ຈະໄປຮັບວັກຊິນ / Select a vaccination location</label
+            >
+            <div class="col-sm-10">
+              <select
+                [ngClass]="{
+                  'is-invalid': submitted && f.location_to_get.errors
+                }"
+                class="form-control"
+                name="location_to_get"
+                formControlName="location_to_get"
+                [(ngModel)]="location_code"
+              >
+                <option value="" disabled selected hidden>
+                  ເລືອກສະຖານທີ່ / Select a location
+                </option>
+                <option
+                  [value]="location.location_code"
+                  *ngFor="let location of locationList"
+                >
+                  {{ location.name_la }}
+                </option>
+              </select>
+              <div
+                *ngIf="submitted && f.location_to_get.errors"
+                class="invalid-feedback"
+              >
+                <div *ngIf="f.location_to_get.errors.required">
+                  ກະລຸນາຕື່ມຂໍ້ມູນ
+                </div>
+              </div>
+            </div>
+          </div>
+          <!--เลือกวัน-->
+
+          <div class="date_to_get">
+            <label class="col-sm-2 col-form-label"
+              >ມື້ເດີນທາງໄປຮັບວັກຊິນ / Date to get vaccinated</label
+            >
+            <!-- <h5 class="sub-title"></h5> -->
+
+            <input
+              [ngClass]="{ 'is-invalid': submitted && f.date_to_get.errors }"
+              class="form-control"
+              type="date"
+              name="date_to_get"
+              formControlName="date_to_get"
+              min="{{ current_date }}"
+              max="{{ current_date_max }}"
+            />
+            <div
+              *ngIf="submitted && f.date_to_get.errors"
+              class="invalid-feedback"
+            >
+              <div *ngIf="f.date_to_get.errors.required">ກະລຸນາຕື່ມຂໍ້ມູນ</div>
+            </div>
+
+            <h5 class="title container-fluid max-width bg-primary">
+              <u>ຂໍ້ມູນຜູ້ລົງທະບຽນ / Registration Information </u>
+            </h5>
+          </div>
+          <div class="date_to_get">
+            <label class="col-sm-2">ກຸຸ່ມເປົ້າໝາຍ / Target group</label>
+            <div class="col-sm-10">
+              <div *ngFor="let data of targetlist; let i = index">
+                <label>
+                  <input
+                    type="checkbox"
+                    [value]="data.value"
+                    (change)="onCheckboxChange($event)"
+                  />
+                  {{ data.name }}
+                </label>
+              </div>
+              <p
+                class="text-danger"
+                *ngIf="submitted && f.ques12.errors?.required"
+              >
+                Checkbox is required, select atleast one value.
+              </p>
+
+              <div
+                *ngIf="submitted && f.ques12.errors"
+                class="invalid-feedback"
+              >
+                <div *ngIf="f.ques12.errors.required">ກະລຸນາຕື່ມຂໍ້ມູນ</div>
+              </div>
+            </div>
+            <div class="ctaget">
+              <label>ກຸ້ມເປົ້າໝາຍອື່ນ ໃຫ້ລະບຸ</label><br />
+              <label for="">ຕົວຢ່າງ : ກຸ້ມເປົ້າໝາຍ1, ກຸ້ມເປົ້າໝາຍ2</label>
+              <input
+                class="form-control"
+                type="text"
+                formControlName="quse12input"
+                name="quse12input"
+                placeholder="ໃສ່ກຸ້ມເປົ້າໝາຍອື່ນ"
+              />
+            </div>
+          </div>
+          <label class="col-sm-2 col-form-label">ຄຳນຳໜ້າຊື່ / Title</label>
+
+          <input
+            [ngClass]="{ 'is-invalid': submitted && f.islao.errors }"
+            formControlName="title"
+            type="radio"
+            value="ທ້າວ"
+            name="title"
+            id="Mr"
+          />
+
+          <label for="Mr">&nbsp;ທ້າວ / Mr</label> &nbsp;&nbsp;
+          <input
+            [ngClass]="{ 'is-invalid': submitted && f.islao.errors }"
+            formControlName="title"
+            type="radio"
+            value="ນາງ"
+            name="title"
+            id="Miss"
+          />
+          <label for="Miss">&nbsp;ນາງ / Miss/Ms/Mrs</label>
+
+          <div *ngIf="submitted && f.title.errors" class="invalid-feedback">
+            <div *ngIf="f.title.errors.required">ກະລຸນາຕື່ມຂໍ້ມູນ</div>
+          </div>
+
+          <!--ใส่ชื่นนามสะกุน-->
+
+          <div class="date_to_get">
+            <label class="col-sm-2 col-form-label"
+              >ຊື່ຂອງຜູ້ສະໝັກ / First Name</label
+            >
+            <div class="col-sm-10">
+              <input
+                [ngClass]="{ 'is-invalid': submitted && f.name.errors }"
+                formControlName="name"
+                name="phone"
+                type="test"
+                class="form-control"
+                placeholder="ໃສ່ຊື່"
+              />
+              <div *ngIf="submitted && f.name.errors" class="invalid-feedback">
+                <div *ngIf="f.name.errors.required">ກະລຸນາຕື່ມຂໍ້ມູນ</div>
+              </div>
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="col-sm-2 col-form-label">ນາມສະກຸນ / Last Name</label>
+            <div class="col-sm-10">
+              <input
+                [ngClass]="{ 'is-invalid': submitted && f.lastName.errors }"
+                formControlName="lastName"
+                name="phone"
+                type="test"
+                class="form-control"
+                placeholder="ນາມສະກຸນ"
+              />
+              <div
+                *ngIf="submitted && f.lastName.errors"
+                class="invalid-feedback"
+              >
+                <div *ngIf="f.lastName.errors.required">ກະລຸນາຕື່ມຂໍ້ມູນ</div>
+              </div>
+            </div>
+          </div>
+
+          <!--ใส่ชื่แขวง-->
+          <div class="col-sm-12 col-xl-3 m-b-30">
+            <label class="col-sm-2 col-form-label"
+              >ແຂວງທີ່ຢູ່ປັດຈຸບັນ / Current Province</label
+            >
+            <!-- <h4 class="sub-title">ຢູ່ແຂວງໃດ</h4> -->
+
+            <select
+              [ngClass]="{ 'is-invalid': submitted && f.province.errors }"
+              name="province"
+              class="form-control"
+              formControlName="province"
+              [(ngModel)]="provinceID"
+              (change)="onchange()"
+            >
+              <option value="" disable seleted hidden>
+                ເລືອກແຂວງ / Select Province
+              </option>
+              <option
+                [value]="province.id_province"
+                *ngFor="let province of provinceList"
+              >
+                {{ province.id_province }}-{{ province.name_lao }}
+              </option>
+            </select>
+          </div>
+
+          <!--ใส่แมือง-->
+          <div class="col-sm-12 col-xl-3 m-b-30">
+            <label class="col-sm-2 col-form-label"
+              >ເມືອງທີ່ຢູ່ປັດຈຸບັນ / Current District</label
+            >
+            <!-- <h4 class="sub-title">ຢູ່ເມືອງໃດ</h4> -->
+
+            <select
+              [ngClass]="{ 'is-invalid': submitted && f.district.errors }"
+              name="district"
+              class="form-control"
+              formControlName="district"
+              [(ngModel)]="districtID"
+              (change)="disonchange()"
+            >
+              <option value="" disabled selected hidden>
+                ເລືອກເມືອງ / Select District
+              </option>
+              <option
+                [value]="district.id_district"
+                *ngFor="let district of districtList"
+              >
+                {{ district.id_district }}-{{ district.name_lao }}
+              </option>
+            </select>
+          </div>
+          <!--ใส่ชื่บ้าน-->
+
+          <div class="col-sm-12 col-xl-3 m-b-30">
+            <h6 class="sub-title">ຢູ່ບ້ານໃດ / Current village</h6>
+            <select
+              [ngClass]="{ 'is-invalid': submitted && f.village.errors }"
+              formControlName="village"
+              name="village"
+              [(ngModel)]="villageID"
+              class="form-control form-control-default"
+            >
+              <option value="" disabled selected hidden>
+                ເລືອກບ້ານ / Select Vilage
+              </option>
+              <option
+                [value]="village.id_village"
+                *ngFor="let village of villageList"
+              >
+                {{ village.id_village }}-{{ village.name_lao }}
+              </option>
+            </select>
+            <div *ngIf="submitted && f.village.errors" class="invalid-feedback">
+              <div *ngIf="f.village.errors.required">ກະລຸນາຕື່ມຂໍ້ມູນ</div>
+            </div>
+            <!-- </ng-template> -->
+          </div>
+          <label class="col-sm-2 col-form-label mt-4"
+            >ຜູ້ທີມາຮັບວັກຊີນຖືພາບໍ່? Is the recipient pregnant?</label
+          >
+          <label for="preg1"
+            ><input
+              formControlName="ques10"
+              type="radio"
+              value="ບໍ່ໄດ້ຖືພາ"
+              name="ques10"
+              id="preg1"
+              (click)="brshow(0)"
+            />&nbsp;ບໍ່ໄດ້ຖືພາ</label
+          >
+          <label for="preg2"
+            ><input
+              formControlName="ques10"
+              type="radio"
+              value="ຖືພາມາ"
+              name="ques10"
+              id="preg2"
+              (click)="brshow(1)"
+            />&nbsp;ຖືພາມາ</label
+          >
+          <br />
+          <div *ngIf="submitted && f.ques10.errors" class="invalid-feedback">
+            <div *ngIf="f.ques10.errors.required">ກະລຸນາຕື່ມຂໍ້ມູນ</div>
+          </div>
+          <div class="brshow">
+            <br />
+            <label>ກະລຸນາໃສ່ອາທິດຖືພາຂອງທ່ານ</label><br />
+            <label>ຕົວຢ່າງ: </label> &nbsp;
+            <label> 5 ອາທິດ(ພຽງແຕ່ຕົວເລກ)</label> <br />
+            <input
+              [ngClass]="{ 'is-invalid': submitted && f.ques11.value == '' }"
+              formControlName="ques11"
+              name="ques11"
+              type="number"
+              class="form-control"
+              placeholder="ກະລຸນາໃສ່ອາທິດທີ່ຖືພາ"
+            />
+            <div
+              *ngIf="submitted && f.ques11.value == ''"
+              class="invalid-feedback"
+              placeholder="ອາທິດຖືພາ"
+            >
+              <div *ngIf="f.ques11.value == ''">ກະລຸນາຕື່ມຂໍ້ມູນ</div>
+            </div>
+          </div>
+
+          <div class="vancine_dose mt-4">
+            <h5 class="sub-title"><u>ສັນຊາດ / Nationality</u></h5>
+
+            <input
+              [ngClass]="{ 'is-invalid': submitted && f.islao.errors }"
+              formControlName="islao"
+              type="radio"
+              value="1"
+              name="islao"
+              (click)="SelectCountry(0)"
+              id="isLao"
+            />
+            <label for="isLao">&nbsp;ຄົນລາວ / Lao</label>
+            <input
+              [ngClass]="{ 'is-invalid': submitted && f.islao.errors }"
+              formControlName="islao"
+              type="radio"
+              value="2"
+              name="islao"
+              (click)="SelectCountry(1)"
+              id="nonLao"
+            />
+
+            <label for="nonLao">&nbsp;ຄົນຕ່າງປະເທດ / Foreigner </label>
+            <div *ngIf="submitted && f.islao.errors" class="invalid-feedback">
+              <div *ngIf="f.islao.errors.required">ກະລຸນາເລືອກສັນຊາດ</div>
+            </div>
+            <br />
+
+            <br />
+
+            <div class="vacin_type_selet_box countryselected">
+              <div class="vaccine_type">
+                <select
+                  [ngClass]="{
+                    'is-invalid': submitted && f.country.value == ''
+                  }"
+                  name="country"
+                  class="form-control"
+                  formControlName="country"
+                >
+                  <option value="" disabled selected hidden>
+                    ເລືອກປະເທດ / Select Country
+                  </option>
+                  <option
+                    [value]="country.name"
+                    *ngFor="let country of countries"
+                  >
+                    {{ country.name }}
+                  </option>
+                </select>
+                <div
+                  *ngIf="submitted && f.country.value == ''"
+                  class="invalid-feedback"
+                >
+                  <div *ngIf="f.country.value == ''">ກະລຸນາເລືອກປະເທດ</div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label class="col-sm-2 col-form-label"
+              >ເລກບັດປະຈຳຕົວ ຫຼື ພາສປອດ / ID Card Number or Passport</label
+            >
+            <div class="col-sm-10">
+              <input
+                [ngClass]="{
+                  'is-invalid': submitted && f.id_or_passportid.errors
+                }"
+                formControlName="id_or_passportid"
+                name="id_or_passportid"
+                type="text"
+                class="form-control"
+                placeholder="ລະບຸບັດປະຈໍາຕົວ/ໜັງສືຜ່ານແດນ/ສໍາມະໂນຄົວ"
+              />
+              <div
+                *ngIf="submitted && f.id_or_passportid.errors"
+                class="invalid-feedback"
+              >
+                <div *ngIf="f.id_or_passportid.errors">ກະລຸນາຕື່ມຂໍ້ມູນ</div>
+              </div>
+            </div>
+          </div>
+
+          <!--passport-->
+
+          <div class="col-sm-12 col-xl-3 m-b-30">
+            <label class="col-sm-2 col-form-label"
+              >ຂະແໜງການເຮັດວຽກ / Job Sector</label
+            >
+            <!-- <h5 class="sub-title">ອາຊີບ</h5> -->
+            <select
+              [ngClass]="{ 'is-invalid': submitted && f.job.errors }"
+              name="job"
+              class="form-control"
+              formControlName="job"
+            >
+              <option value="" disabled selected hidden>ເລືອກຂະແໜງການ</option>
+              <option [value]="job.job_id" *ngFor="let job of jobList">
+                {{ job.job_name }}
+              </option>
+            </select>
+            <div *ngIf="submitted && f.job.errors" class="invalid-feedback">
+              <div *ngIf="f.job.errors.required">ກະລຸນາຕື່ມຂໍ້ມູນ</div>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label class="col-sm-2 col-form-label"
+              >ບ່ອນເຮັດວຽກ / Workplace</label
+            >
+            <div class="col-sm-10">
+              <input
+                [ngClass]="{
+                  'is-invalid': submitted && f.work_location.errors
+                }"
+                formControlName="work_location"
+                name="work_location"
+                type="test"
+                class="form-control"
+                placeholder="ບ່ອນເຮັດວຽກ / Required "
+              />
+              <div
+                *ngIf="submitted && f.work_location.errors"
+                class="invalid-feedback"
+              >
+                <div *ngIf="f.work_location.errors.required">
+                  ກະລຸນາຕື່ມຂໍ້ມູນ
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!--phone-->
+          <div class="form-group">
+            <label class="col-sm-2 col-form-label"
+              >ຫມາຍເລກໂທລະສັບ / Phone Number</label
+            >
+            <div class="col-sm-10">
+              <input
+                [ngClass]="{ 'is-invalid': submitted && f.phone.errors }"
+                formControlName="phone"
+                name="phone"
+                type="number"
+                pattern="[0-9]*"
+                inputmode="numeric"
+                class="form-control"
+                placeholder="020XXXXXXXX "
+              />
+              <div *ngIf="submitted && f.phone.errors" class="invalid-feedback">
+                <div *ngIf="f.phone.errors.required">ກະລຸນາຕື່ມຂໍ້ມູນ</div>
+              </div>
+            </div>
+          </div>
+
+          <h5 class="title container-fluid max-width bg-primary">
+            <u>ຂໍ້ມູນການແພດ / Medical Information</u>
+          </h5>
+
+          <div class="col-sm-12 col-xl-3 m-b-30">
+            <label class="col-sm-2 col-form-label"
+              >ທ່ານມີພະຍາດໃດບໍ່? <br />
+              Do you have any disease? *</label
+            >
+            <!-- <h5 class="sub-title">ອາຊີບ</h5> -->
+            <select
+              [ngClass]="{ 'is-invalid': submitted && f.Disease.errors }"
+              name="Disease"
+              class="form-control"
+              formControlName="Disease"
+            >
+              <option value="" disabled selected hidden>
+                ເລືອກພະຍາດ / Select disease
+              </option>
+              <option [value]="dis.id_disease" *ngFor="let dis of disease">
+                {{ dis.name_lao }}
+              </option>
+            </select>
+          </div>
+
+          <div class="">
+            <div class="">
+              <label class="col-sm-2 col-form-label"
+                >ມື້ນີ້ທ່ານຮູ້ສຶກເມື່ອຍບໍ່? <br /><b class="subtitle">
+                  Are you feeling tired today?</b
+                ></label
+              >
+
+              <input
+                [ngClass]="{ 'is-invalid': submitted && f.ques1.errors }"
+                formControlName="ques1"
+                type="radio"
+                value="ແມ່ນ"
+                name="ques1"
+                id="ques1 man"
+              />
+              <label for="ques1 man">&nbsp;ແມ່ນ / Yes</label> &nbsp;&nbsp;
+              <br /><br />
+              <input
+                [ngClass]="{ 'is-invalid': submitted && f.ques1.errors }"
+                formControlName="ques1"
+                type="radio"
+                value="ບໍ່ແມ່ນ"
+                name="ques1"
+                id="ques1 brman"
+              />
+              <label for="ques1 brman">&nbsp;ບໍ່ແມ່ນ / No</label>
+              &nbsp;&nbsp;&nbsp; <br /><br />
+              <input
+                [ngClass]="{ 'is-invalid': submitted && f.ques1.errors }"
+                formControlName="ques1"
+                type="radio"
+                value="ບໍ່ຮູ້"
+                name="ques1"
+                id="quest1 brhu"
+              />
+              <label for="quest1 brhu">&nbsp;ບໍ່ຮູ້ / Don't know</label>
+
+              <div *ngIf="submitted && f.ques1.errors" class="invalid-feedback">
+                <div *ngIf="f.ques1.errors.required">ກະລຸນາຕື່ມຂໍ້ມູນ</div>
+              </div>
+            </div>
+
+            <div class="">
+              <label class="col-sm-2 col-form-label"
+                >ທ່ານມີໄຂ້ບໍ່? ມີໄຂ້ໝາຍເຖິງອຸນຫະພູມຮ່າງກາຍ ສູງກວ່າ 37.5 ອົງສາ?
+                <br /><b class="subtitle"
+                  >Do you have a fever? Fever with body temperature Over 37.5
+                  degrees?</b
+                ></label
+              >
+
+              <input
+                [ngClass]="{ 'is-invalid': submitted && f.ques2.errors }"
+                formControlName="ques2"
+                type="radio"
+                value="ແມ່ນ"
+                name="ques2"
+                id="ques2 man"
+              />
+              <label for="ques2 man">&nbsp;ແມ່ນ / Yes</label> &nbsp;&nbsp;
+              <br /><br />
+              <input
+                [ngClass]="{ 'is-invalid': submitted && f.ques2.errors }"
+                formControlName="ques2"
+                type="radio"
+                value="ບໍ່ແມ່ນ"
+                name="ques2"
+                id="ques2 brman"
+              />
+              <label for="ques2 brman">&nbsp;ບໍ່ແມ່ນ / No</label>
+              &nbsp;&nbsp;&nbsp; <br /><br />
+              <input
+                [ngClass]="{ 'is-invalid': submitted && f.ques2.errors }"
+                formControlName="ques2"
+                type="radio"
+                value="ບໍ່ຮູ້"
+                name="ques2"
+                id="ques2 brhu"
+              />
+              <label for="ques2 brhu">&nbsp;ບໍ່ຮູ້ / Don't know</label>
+              <div *ngIf="submitted && f.ques2.errors" class="invalid-feedback">
+                <div *ngIf="f.ques2.errors.required">ກະລຸນາຕື່ມຂໍ້ມູນ</div>
+              </div>
+            </div>
+
+            <div class="">
+              <label class="col-sm-2 col-form-label"
+                >ທ່ານເປັນພະຍາດພູມຄຸ້ມກັນບົກພ່ອງ ຫຼື
+                ກຳລັງກິນຢາທີ່ມີຜົນກະທົບຕໍ່ລະບົບພູມຄຸ້ມ ກັນຂອງທ່ານ ຫຼື ບໍ່?
+                <br />
+                <b class="subtitle"
+                  >Do you have an autoimmune disease or Taking medications that
+                  affect the immune system or not?</b
+                ></label
+              >
+
+              <input
+                [ngClass]="{ 'is-invalid': submitted && f.ques3.errors }"
+                formControlName="ques3"
+                type="radio"
+                value="ແມ່ນ"
+                name="ques3"
+                id="ques3 man"
+              />
+              <label for="ques3 man">&nbsp;ແມ່ນ / Yes</label> &nbsp;&nbsp;
+              <br /><br />
+              <input
+                [ngClass]="{ 'is-invalid': submitted && f.ques3.errors }"
+                formControlName="ques3"
+                type="radio"
+                value="ບໍ່ແມ່ນ"
+                name="ques3"
+                id="ques3 brman"
+              />
+              <label for="ques3 brman">&nbsp;ບໍ່ແມ່ນ / No</label>
+              &nbsp;&nbsp;&nbsp; <br /><br />
+              <input
+                [ngClass]="{ 'is-invalid': submitted && f.ques3.errors }"
+                formControlName="ques3"
+                type="radio"
+                value="ບໍ່ຮູ້"
+                name="ques3"
+                id="ques3 brhu"
+              />
+              <label for="ques3 brhu">&nbsp;ບໍ່ຮູ້ / Don't know</label>
+              <div *ngIf="submitted && f.ques3.errors" class="invalid-feedback">
+                <div *ngIf="f.ques3.errors.required">ກະລຸນາຕື່ມຂໍ້ມູນ</div>
+              </div>
+            </div>
+            <div class="">
+              <label class="col-sm-2 col-form-label"
+                >ທ່ານເປັນນພະຍາດທີ່ເຮັດໃຫ້ເລືອດອອກງ່າຍ ຫຼື
+                ກາລັງກິນຢາທີ່ມີຜົນກະທົບຕໍ່ການກ້າມເລືອດ ຫຼືບໍ່? <br />
+                <b class="subtitle"
+                  >Are you suffering from a disease that makes it easier to
+                  bleed? Taking medications that affect blood clotting Or
+                  not?</b
+                ></label
+              >
+
+              <input
+                [ngClass]="{ 'is-invalid': submitted && f.ques4.errors }"
+                formControlName="ques4"
+                type="radio"
+                value="ແມ່ນ"
+                name="ques4"
+                id="ques4 man"
+              />
+              <label for="ques4 man">&nbsp;ແມ່ນ / Yes</label> &nbsp;&nbsp;
+              <br /><br />
+              <input
+                [ngClass]="{ 'is-invalid': submitted && f.ques4.errors }"
+                formControlName="ques4"
+                type="radio"
+                value="ບໍ່ແມ່ນ"
+                name="ques4"
+                id="ques4 brman"
+              />
+              <label for="ques4 brman">&nbsp;ບໍ່ແມ່ນ / No</label>
+              &nbsp;&nbsp;&nbsp; <br /><br />
+              <input
+                [ngClass]="{ 'is-invalid': submitted && f.ques4.errors }"
+                formControlName="ques4"
+                type="radio"
+                value="ບໍ່ຮູ້"
+                name="ques4"
+                id="ques4 brhu"
+              />
+              <label for="ques4 brhu">&nbsp;ບໍ່ຮູ້ / Don't know</label>
+              <div *ngIf="submitted && f.ques4.errors" class="invalid-feedback">
+                <div *ngIf="f.ques4.errors.required">ກະລຸນາຕື່ມຂໍ້ມູນ</div>
+              </div>
+            </div>
+            <div class="">
+              <label class="col-sm-2 col-form-label"
+                >ທ່ານມີປະຫວັດຊັກ, ເປັນລົມບ້າໝູຫຼືເປັນ
+                ພະຍາດທີ່ກ່ຽວຂ້ອງກັບລະບົບປະສາດ ຫຼື ບໍ່? <br />
+                <b class="subtitle"
+                  >You have a history of seizures, epilepsy or a Diseases
+                  related to the nervous system?</b
+                ></label
+              >
+
+              <input
+                [ngClass]="{ 'is-invalid': submitted && f.ques5.errors }"
+                formControlName="ques5"
+                type="radio"
+                value="ແມ່ນ"
+                name="ques5"
+                id="ques5 man"
+              />
+              <label for="ques5 man">&nbsp;ແມ່ນ / Yes</label> &nbsp;&nbsp;
+              <br /><br />
+              <input
+                [ngClass]="{ 'is-invalid': submitted && f.ques5.errors }"
+                formControlName="ques5"
+                type="radio"
+                value="ບໍ່ແມ່ນ"
+                name="ques5"
+                id="ques5 brman"
+              />
+              <label for="ques5 brman">&nbsp;ບໍ່ແມ່ນ / No</label>
+              &nbsp;&nbsp;&nbsp; <br /><br />
+              <input
+                [ngClass]="{ 'is-invalid': submitted && f.ques5.errors }"
+                formControlName="ques5"
+                type="radio"
+                value="ບໍ່ຮູ້"
+                name="ques5"
+                id="ques5 brhu"
+              />
+              <label for="ques5 brhu">&nbsp;ບໍ່ຮູ້ / Don't know</label>
+              <div *ngIf="submitted && f.ques5.errors" class="invalid-feedback">
+                <div *ngIf="f.ques5.errors.required">ກະລຸນາຕື່ມຂໍ້ມູນ</div>
+              </div>
+            </div>
+            <div class="">
+              <label class="col-sm-2 col-form-label"
+                >ທ່ານກຳລັງໃຫ້ນົມລູກ, ຖືພາຫຼືວາງແຜນຈະ ເອົາລູກບໍ່? <br />
+                <b class="subtitle">
+                  You are breastfeeding, pregnant, or planning to Have a
+                  baby?</b
+                ></label
+              >
+
+              <input
+                [ngClass]="{ 'is-invalid': submitted && f.ques6.errors }"
+                formControlName="ques6"
+                type="radio"
+                value="ແມ່ນ"
+                name="ques6"
+                id="ques6 man"
+              />
+              <label for="ques6 man">&nbsp;ແມ່ນ / Yes</label> &nbsp;&nbsp;
+              <br /><br />
+              <input
+                [ngClass]="{ 'is-invalid': submitted && f.ques6.errors }"
+                formControlName="ques6"
+                type="radio"
+                value="ບໍ່ແມ່ນ"
+                name="ques6"
+                id="ques6 brman"
+              />
+              <label for="ques6 brman">&nbsp;ບໍ່ແມ່ນ / No</label>
+              &nbsp;&nbsp;&nbsp; <br /><br />
+              <input
+                [ngClass]="{ 'is-invalid': submitted && f.ques6.errors }"
+                formControlName="ques6"
+                type="radio"
+                value="ບໍ່ຮູ້"
+                name="ques6"
+                id="ques6 brhu"
+              />
+              <label for="ques6 brhu">&nbsp;ບໍ່ຮູ້ / Don't know</label>
+              <div *ngIf="submitted && f.ques6.errors" class="invalid-feedback">
+                <div *ngIf="f.ques6.errors.required">ກະລຸນາຕື່ມຂໍ້ມູນ</div>
+              </div>
+            </div>
+            <div class="">
+              <label class="col-sm-2 col-form-label"
+                >ກ່ອນໜ້ານີ້ທ່ານເຄີຍແພ້ວັກຊີນແບບຮຸນແຮງ ບໍ່? <br /><b
+                  class="subtitle"
+                >
+                  Have you ever had a severe allergic reaction to a vaccine
+                  before?</b
+                ></label
+              >
+
+              <input
+                [ngClass]="{ 'is-invalid': submitted && f.ques7.errors }"
+                formControlName="ques7"
+                type="radio"
+                value="ເຄີຍ"
+                name="ques7"
+                id="ques7 man"
+              />
+              <label for="ques7 man">&nbsp;ເຄີຍ / Yes</label> &nbsp;&nbsp;
+              <br /><br />
+              <input
+                [ngClass]="{ 'is-invalid': submitted && f.ques7.errors }"
+                formControlName="ques7"
+                type="radio"
+                value="ບໍ່ເຄີຍ"
+                name="ques7"
+                id="ques7 brman"
+              />
+              <label for="ques7 brman">&nbsp;ບໍ່ເຄີຍ / No</label>
+              &nbsp;&nbsp;&nbsp; <br /><br />
+              <!-- <input [ngClass]="{ 'is-invalid': submitted && f.ques7.errors }" formControlName="ques7" type="radio" value="ບໍ່ຮູ້" name="ques7" id="ques7 brhu" />
+                  <label for="ques7 brhu">&nbsp;ບໍ່ຮູ້ / Don't know</label> -->
+              <div *ngIf="submitted && f.ques7.errors" class="invalid-feedback">
+                <div *ngIf="f.ques7.errors.required">ກະລຸນາຕື່ມຂໍ້ມູນ</div>
+              </div>
+            </div>
+            <div class="">
+              <label class="col-sm-2 col-form-label"
+                >2 ອາທິດທີ່ຜ່ານມາ ທ່ານເຄີຍຮັບວັກຊີນຊະນິດອື່ນບໍ່?<br />
+                <b class="subtitle">
+                  Two weeks ago you were vaccinated Any other?
+                </b></label
+              >
+
+              <input
+                [ngClass]="{ 'is-invalid': submitted && f.ques8.errors }"
+                formControlName="ques8"
+                type="radio"
+                value="ແມ່ນ"
+                name="ques8"
+                id="ques8 man"
+              />
+              <label for="ques8 man">&nbsp;ແມ່ນ / Yes</label> &nbsp;&nbsp;
+              <br /><br />
+              <input
+                [ngClass]="{ 'is-invalid': submitted && f.ques8.errors }"
+                formControlName="ques8"
+                type="radio"
+                value="ບໍ່ແມ່ນ"
+                name="ques8"
+                id="ques8 brman"
+              />
+              <label for="ques8 brman">&nbsp;ບໍ່ແມ່ນ / No</label>
+              &nbsp;&nbsp;&nbsp; <br /><br />
+              <input
+                [ngClass]="{ 'is-invalid': submitted && f.ques8.errors }"
+                formControlName="ques8"
+                type="radio"
+                value="ບໍ່ຮູ້"
+                name="ques8"
+                id="ques8 brhu"
+              />
+              <label for="ques8 brhu">&nbsp;ບໍ່ຮູ້ / Don't know</label>
+              <div *ngIf="submitted && f.ques8.errors" class="invalid-feedback">
+                <div *ngIf="f.ques8.errors.required">ກະລຸນາຕື່ມຂໍ້ມູນ</div>
+              </div>
+            </div>
+            <div class="">
+              <label class="col-sm-2 col-form-label"
+                >ທ່ານເຄີຍເປັນພະຍາດໂຄວິດ-19ບໍ? <br /><b class="subtitle">
+                  Have you ever had Covid-19?</b
+                ></label
+              >
+
+              <input
+                [ngClass]="{ 'is-invalid': submitted && f.ques9.errors }"
+                formControlName="ques9"
+                type="radio"
+                value="ເຄີຍ"
+                name="ques9"
+                id="ques9 man"
+              />
+              <label for="ques9 man">&nbsp;ເຄີຍ / Yes</label> &nbsp;&nbsp;
+              <br /><br />
+              <input
+                [ngClass]="{ 'is-invalid': submitted && f.ques9.errors }"
+                formControlName="ques9"
+                type="radio"
+                value="ບໍ່ເຄີຍ"
+                name="ques9"
+                id="ques9 brman"
+              />
+              <label for="ques9 brman">&nbsp;ບໍ່ເຄີຍ / No</label>
+              &nbsp;&nbsp;&nbsp; <br /><br />
+              <!-- <input [ngClass]="{ 'is-invalid': submitted && f.ques9.errors }" formControlName="ques9" type="radio" value="ບໍ່ຮູ້" name="ques9" id="ques9 brhu" />
+                  <label for="ques9 brhu">&nbsp;ບໍ່ຮູ້ / Don't know</label> -->
+              <div *ngIf="submitted && f.ques9.errors" class="invalid-feedback">
+                <div *ngIf="f.ques9.errors.required">ກະລຸນາຕື່ມຂໍ້ມູນ</div>
+              </div>
+            </div>
+          </div>
+
+          <hr />
+
+          <div class="date_to_get">
+            <label class="col-sm-2 col-form-label"
+              >ທ່ານເຄີຍເປັນພະຍາດໂຄວິດ 19 ບໍ? ,
+              ຖ້າເຄີຍກະລຸນາໃສ່ມື້ທີ່ທ່ານປົ່ວເຊົາ <br />
+              <b class="subtitle"
+                >If ever had covid-19, when you have cured?</b
+              ></label
+            >
+            <!-- <h5 class="sub-title"></h5> -->
+
+            <input
+              class="form-control"
+              type="date"
+              name="date_covid"
+              formControlName="date_covid"
+              min="2019-01-01"
+              max="{{ current_date_covide }}"
+            />
+          </div>
+
+          <hr />
+          <div class="warning mt-2 mb-2">
+            <label>ໝາຍເຫດ // <i>Warning</i></label>
+            <li>
+              ຫຼັງຈາກສົ່ງຂໍ້ມູນໃຫ້ທ່ານຖ່າຍຮູບໜ້າຈໍຫຼືຈົດ
+              ບັນທຶກລະຫັດບັດຄີວໄວ້ເພື່ອເອົາໄປຢັ້ງຢືນ ຕອນໄປຮັບການສັກຢາ <br /><i
+                class="subtitle"
+              >
+                After submitting the information you are asked to take a
+                screenshot or take a note Save the queue card code for
+                verification When getting vaccinated
+              </i>
+            </li>
+            <li>
+              ຫຼັງຈາກຮູ້ສະຖານທີ່ ແລະ ເວລາໄປຮັບວັກຊີນ ແລ້ວ ຕ້ອງໄປຕາມຄີວທີ່ນັດໝາຍ,
+              ຖ້າເກີນ ເວລາທີ່ນັດໝາຍຈະຖືວ່າເປັນການສະລະສິດ <br />
+              <i class="subtitle">
+                After knowing the place and time to get vaccinated Then go to
+                the queue, if more Appointment time will be considered a waiver
+              </i>
+            </li>
+            <li>
+              ເມື່ອທ່ານລົງທະບຽນສຳເລັດແລ້ວ ທາງເຮົາຈະກວດສອບຂໍ້ມູນແລ້ວ ສົ່ງຂໍ້ຄວາມ
+              ຫຼື SMS ເພື່ອນັດເວລາ ເຂົ້າໄປຮັບວັກຊີນ
+              <br /><i class="subtitle"> Please wait for SMS </i>
+            </li>
+          </div>
+          <hr />
+
+          <ngx-recaptcha2
+            [siteKey]="siteKey"
+            [hl]="hl"
+            formControlName="recaptcha"
+          >
+          </ngx-recaptcha2>
+          <button class="big-button" type="submit" id="submit-form">
+            ສົ່ງຂໍ້ມູນ
+          </button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>

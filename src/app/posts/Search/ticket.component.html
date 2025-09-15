@@ -1,0 +1,69 @@
+<div style="height: 3rem; background: #5f98f4"></div>
+
+<ngx-spinner
+    bdColor="rgba(0, 0, 0, 0.8)"
+    size="medium"
+    color="#fff"
+    type="ball-spin-fade"
+    [fullScreen]="true"
+>
+    <p style="color: white">ກະລຸນາລໍຖ້າ</p>
+</ngx-spinner>
+<div class="box">
+    <div class="box2">
+        <h1 style="color: rgb(255, 255, 255)">
+            ບ້ອນລະຫັດບັດຄິວ | Ticket Inquiry
+        </h1>
+
+        <input
+            [(ngModel)]="tiketGet"
+            type="search"
+            placeholder="ຕົວຢ່າງ:DP-xxxxxxx"
+            class="search-field"
+        />
+        <button type="submit" class="search-button" (click)="ticketfun()">
+            <i class="fas fa-search"></i>
+        </button>
+        <div style="height: 3rem; background: #317af1"></div>
+        <div class="container-fluid">
+            <ul class="list-group">
+                <li class="list-group-item" *ngFor="let tick of getTicket">
+                    <span>ລະຫັດບັດຄິວ:</span>
+                    <span>{{ tick.ticket_code }}</span>
+                </li>
+                <li class="list-group-item" *ngFor="let tick of getTicket">
+                    <span>ຊື່:</span> <span>{{ tick.name }}</span>
+                </li>
+                <li class="list-group-item" *ngFor="let tick of getTicket">
+                    <span>ນາມສະກຸນ:</span> <span>{{ tick.lastname }}</span>
+                </li>
+                <li class="list-group-item" *ngFor="let tick of getTicket">
+                    <span>ປະເພດວັກຊີນ:</span>
+                    <span>{{ tick.vaccine_name }}</span>
+                </li>
+                <li class="list-group-item" *ngFor="let tick of getTicket">
+                    <span>ສະຖານທີ່:</span> <span>{{ tick.location_name }}</span>
+                </li>
+                <li class="list-group-item" *ngFor="let tick of getTicket">
+                    <span>ມື້ຮັບວັກຊີນ:</span>
+                    <span>{{
+                        tick.Appointment_date | date : "dd/MM/yyyy"
+                    }}</span>
+                </li>
+                <li class="list-group-item" *ngFor="let tick of getTicket">
+                    <span>ໝາຍເລກໂທລະສັບ:</span> <span>{{ tick.phone }}</span>
+                </li>
+                <li class="list-group-item" *ngFor="let tick of getTicket">
+                    <span>ສະຖານະ:</span>
+                    <span
+                        [ngClass]="{
+                            text: status_cus == '2',
+                            textwait: status_cus == '1'
+                        }"
+                        >{{ status_cus_name }}</span
+                    >
+                </li>
+            </ul>
+        </div>
+    </div>
+</div>

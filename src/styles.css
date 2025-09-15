@@ -1,0 +1,90 @@
+/* You can add global styles to this file, and also import other style files */
+html,
+body {
+    height: 100%;
+}
+body {
+    margin: 0;
+    font-family: Roboto, "Helvetica Neue", sans-serif;
+}
+
+@font-face {
+    font-family: NotoSansLao;
+    src: url(assets/fonts/NotoSansLao-Bold.ttf);
+}
+.Noto {
+    font-family: NotoSansLao;
+}
+
+:root {
+    --colorShadeA: #3779b5;
+    --colorShadeB: #3779b5;
+    --colorShadeC: #3675cb;
+    --colorShadeD: #5f98f4;
+    --colorShadeE: #fff;
+}
+body {
+    display: flex;
+    flex-direction: column;
+}
+.footer {
+    background-color: #317af1;
+    margin-top: auto;
+}
+.Text {
+    font-family: NotoSansLao;
+    font-size: 10px;
+    text-align: start;
+    padding: 0;
+}
+.Text1 {
+    text-align: left;
+    font-family: NotoSansLao;
+    font-size: 18px;
+    text-align: center;
+}
+.Text2 {
+    justify-content: center;
+    text-align: center;
+}
+.collapse {
+    color: white;
+    font-size: 20px;
+    font-family: NotoSansLao;
+    margin: auto;
+}
+.icon {
+    width: 150px;
+    height: 120px;
+    display: flex;
+    margin: auto;
+    padding-right: 20px;
+}
+.row {
+    font-family: NotoSansLao;
+    font-size: 17px;
+    justify-content: space-between;
+}
+@media only screen and (max-width: 320px) {
+    .footer {
+        width: 364px;
+    }
+}
+@media only screen and (max-width: 770px) {
+    .Logos {
+        grid-template-columns: 1fr 1fr;
+        grid-gap: 20px;
+        display: grid;
+        object-fit: scale-down;
+    }
+}
+@media only screen and (max-width: 990px) {
+    .Logos {
+        display: flex;
+        object-fit: scale-down;
+    }
+}
+.Logos {
+    width: fit-content;
+    height: auto;
+}
