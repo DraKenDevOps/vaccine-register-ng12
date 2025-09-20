@@ -396,7 +396,7 @@ export class FormCreate implements OnInit {
                     footer: " ເມື່ອທ່ານລົງທະບຽນສຳເລັດແລ້ວ ທາງເຮົາຈະກວດສອບຂໍ້ມູນແລ້ວ ສົ່ງຂໍ້ຄວາມ ຫຼື SMS ເພື່ອນັດເວລາ ເຂົ້າໄປຮັບວັກຊີນ",
                     imageWidth: 150,
                     imageHeight: 150,
-                    imageUrl: "assets/assets/images/newlogobig.jpeg",
+                    imageUrl: "assets/images/newlogobig.jpeg",
                     showCancelButton: true,
                     confirmButtonColor: "#3085d6",
                     cancelButtonColor: "#d33",
